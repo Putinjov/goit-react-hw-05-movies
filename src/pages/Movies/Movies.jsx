@@ -20,32 +20,53 @@ const Movies = () => {
         setLoading(true);
         const { results } = await searchMovie(searchQuery);
         setData(results);
-        setLoading(false);
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
       }
     };
+
     if (searchQuery) {
       getData();
     }
   }, [searchQuery]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setQuery(e.target.value);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSearchParams({ query: query });
   };
+
+  let content = null;
+
+  if (!searchQuery) {
+    content = <p className={css.descr}>Please enter a search query</p>;
+  } else if (loading) {
+    content = 'Loading...';
+  } else if (data.length > 0) {
+    content = data.map(({ title, id }) => (
+      <li key={id} className={css.listItem}>
+        <Link state={{ from: location }} to={`/movies/${id}`}>
+          {title}
+        </Link>
+      </li>
+    ));
+  } else {
+    content = (
+      <p className={css.descr}>
+        No movies with this title were found. Try entering another title
+      </p>
+    );
+  }
 
   return (
     <>
       <div className={css.wrap}>
         <h2 className={css.title}>Search movies:</h2>
-
         <form onSubmit={handleSubmit} className={css.movieForm}>
           <input
             value={query}
@@ -60,27 +81,7 @@ const Movies = () => {
           </button>
         </form>
       </div>
-      <ul className={css.list}>
-        {searchQuery ? (
-          loading ? (
-            'Loading...'
-          ) : data.length > 0 ? (
-            data.map(({ title, id }) => (
-              <li key={id} className={css.listItem}>
-                <Link state={{ from: location }} to={`/movies/${id}`}>
-                  {title}
-                </Link>
-              </li>
-            ))
-          ) : (
-            <p>
-              No movies with this title were found. Try entering another title
-            </p>
-          )
-        ) : (
-          <p className={css.descr}></p>
-        )}
-      </ul>
+      <ul className={css.list}>{content}</ul>
     </>
   );
 };

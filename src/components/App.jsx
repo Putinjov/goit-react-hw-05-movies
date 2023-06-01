@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import css from './app.module.css';
+import { NotFound } from '../pages/NotFound/NotFound';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const Movies = lazy(() => import('../pages/Movies/Movies'));
@@ -42,6 +43,7 @@ export const App = () => {
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </>

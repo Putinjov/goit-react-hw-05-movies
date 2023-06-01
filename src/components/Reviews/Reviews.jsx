@@ -25,26 +25,28 @@ const Reviews = () => {
     getData();
   }, [movieId]);
 
-  return (
-    <>
-      {loading ? (
-        'Loading...'
-      ) : data && data.length > 0 ? (
-        <div className={css.listWrap}>
-          <ul className={css.list}>
-            {data.map(({ author, content, id }) => (
-              <li key={id} className={css.listItem}>
-                <p className={css.listName}>{author}</p>
-                {content && content}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p className={css.error}>No reviews found</p>
-      )}
-    </>
-  );
+  let content;
+  if (loading) {
+    content = 'Loading...';
+  } else if (data && data.length > 0) {
+    content = (
+      <div className={css.listWrap}>
+        <ul className={css.list}>
+          {data.map(({ author, content, id }) => (
+            <li key={id} className={css.listItem}>
+              <p className={css.listName}>{author}</p>
+              {content && content}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  } else {
+    content = <p className={css.error}>No reviews found</p>;
+  }
+
+  return <>{content}</>;
 };
 
 export default Reviews;
+

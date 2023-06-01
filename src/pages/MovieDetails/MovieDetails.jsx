@@ -6,7 +6,8 @@ import noMovieImg from '../../img/no-poster-available.jpg';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
-
+  const location = useLocation();
+  const cameBack = location.state?.from ?? '/';
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +17,6 @@ const MovieDetails = () => {
         setLoading(true);
         const data = await getMovieDetails(movieId);
         setData(data);
-        setLoading(false);
       } catch (error) {
         console.log(error);
       } finally {
@@ -25,6 +25,10 @@ const MovieDetails = () => {
     };
     getData();
   }, [movieId]);
+
+  if (loading) {
+    return 'Loading...';
+  }
 
   const getYear = releaseDate => {
     const date = new Date(releaseDate);
@@ -35,62 +39,47 @@ const MovieDetails = () => {
     return arrGenres.map(genre => genre.name).join(', ');
   };
 
-  const location = useLocation();
-
-  const cameBack = location.state?.from ?? '/';
+  const posterPath = data.poster_path
+    ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+    : noMovieImg;
 
   return (
     <>
       <Link className={css.btn} to={cameBack}>
         Go Back
       </Link>
-      {loading ? (
-        'Loading...'
-      ) : (
-        <>
-          <div className={css.imgWrap}>
-            {data.poster_path ? (
-              <img
-                className={css.img}
-                alt={data.original_title}
-                src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
-              />
-            ) : (
-              <img className={css.img} src={noMovieImg} alt="not available" />
-            )}
-
-            <div className={css.descrWrap}>
-              <h1>
-                {data.original_title} ({getYear(data.release_date)})
-              </h1>
-              <p className={css.descrTitle}>
-                User Score: {~~(data.vote_average * 10)}%
-              </p>
-              <p className={css.descrTitle}>Overview</p>
-              <p>{data.overview}</p>
-              <p className={css.descrTitle}>Genres</p>
-              <p>{getGenres(data.genres)}</p>
-            </div>
-          </div>
-          <div>
-            <ul className={css.btnList}>
-              <li>
-                <Link to="cast" state={{ from: cameBack }}>
-                  <button className={css.castBtn}>Cast</button>
-                </Link>
-              </li>
-              <li>
-                <Link to="reviews" state={{ from: cameBack }}>
-                  <button className={css.reviewsBtn}>Reviews</button>
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <Suspense fallback={<div>Loading subpage...</div>}>
-            <Outlet />
-          </Suspense>
-        </>
-      )}
+      <div className={css.imgWrap}>
+        <img className={css.img} alt={data.original_title} src={posterPath} />
+        <div className={css.descrWrap}>
+          <h1>
+            {data.original_title} ({getYear(data.release_date)})
+          </h1>
+          <p className={css.descrTitle}>
+            User Score: {~~(data.vote_average * 10)}%
+          </p>
+          <p className={css.descrTitle}>Overview</p>
+          <p>{data.overview}</p>
+          <p className={css.descrTitle}>Genres</p>
+          <p>{getGenres(data.genres)}</p>
+        </div>
+      </div>
+      <div>
+        <ul className={css.btnList}>
+          <li>
+            <Link to="cast" state={{ from: cameBack }}>
+              <button className={css.castBtn}>Cast</button>
+            </Link>
+          </li>
+          <li>
+            <Link to="reviews" state={{ from: cameBack }}>
+              <button className={css.reviewsBtn}>Reviews</button>
+            </Link>
+          </li>
+        </ul>
+      </div>
+      <Suspense fallback={<div>Loading subpage...</div>}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };

@@ -1,8 +1,15 @@
 import { DebounceInput } from 'react-debounce-input';
+import { useState } from 'react';
 import { Wrapper, Header, Icon } from './SearchBox.styled';
 import propTypes from 'prop-types';
 
-export const SearchBox = ({ value, onChange }) => {
+export const SearchBox = () => {
+  const [value, setValue] = useState('');
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
+
   return (
     <Wrapper>
       <Header>Search movies:</Header>
@@ -10,7 +17,7 @@ export const SearchBox = ({ value, onChange }) => {
         type="text"
         debounceTimeout={500}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={handleChange}
         placeholder="type here"
       />
       <Icon />
