@@ -44,7 +44,8 @@ const MovieDetails = () => {
 
   const getYear = releaseDate => {
     const date = new Date(releaseDate);
-    return date.getFullYear();
+    const year = date.getFullYear();
+    return isNaN(year) ? 'Unknown' : year;
   };
 
   const getGenres = arrGenres => {
