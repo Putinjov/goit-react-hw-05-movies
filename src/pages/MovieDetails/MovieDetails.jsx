@@ -1,8 +1,9 @@
-import { useParams, Link, Outlet, useLocation } from 'react-router-dom';
+import { useParams, Link, Outlet, useLocation,} from 'react-router-dom';
 import { useState, useEffect, Suspense } from 'react';
 import { getMovieDetails } from '../../services/api';
 import css from './movie-details.module.css';
 import noMovieImg from '../../img/no-poster-available.jpg';
+import { NotFound } from 'pages/NotFound/NotFound';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -10,6 +11,7 @@ const MovieDetails = () => {
   const cameBack = location.state?.from ?? '/';
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -18,16 +20,26 @@ const MovieDetails = () => {
         const data = await getMovieDetails(movieId);
         setData(data);
       } catch (error) {
-        console.log(error);
+        setIsError(true);
       } finally {
         setLoading(false);
       }
     };
-    getData();
+
+    if (!movieId) {
+      setIsError(true);
+      setLoading(false);
+    } else {
+      getData();
+    }
   }, [movieId]);
 
   if (loading) {
     return 'Loading...';
+  }
+
+  if (isError) {
+    return NotFound();
   }
 
   const getYear = releaseDate => {
@@ -79,6 +91,7 @@ const MovieDetails = () => {
       </div>
       <Suspense fallback={<div>Loading subpage...</div>}>
         <Outlet />
+
       </Suspense>
     </>
   );
