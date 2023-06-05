@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ListMovies, MovieItem } from './home.styled';
+import { ListMovies } from './home.styled';
 import { getTrendingMovies } from '../../services/api';
+import { MoviesList } from 'pages/MoviesList/MoviesList';
+
 import css from './home.module.css';
 
 const Home = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const location = useLocation();
 
   useEffect(() => {
     const getData = async () => {
@@ -21,6 +20,7 @@ const Home = () => {
         console.log(error);
       }
     };
+
     getData();
   }, []);
 
@@ -28,22 +28,11 @@ const Home = () => {
     <>
       <ListMovies>
         <h2 className={css.title}>Trending movies:</h2>
-        {loading
-          ? 'Loading...'
-          : data.map(({ title, id }) => (
-              <MovieItem key={id}>
-                <Link
-                  to={`/movies/${id}`}
-                  state={{ from: location }}
-                  className={css.movieItem}
-                >
-                  {title}
-                </Link>
-              </MovieItem>
-            ))}
+        {data && <MoviesList movies={data} />}
       </ListMovies>
     </>
   );
 };
 
 export default Home;
+

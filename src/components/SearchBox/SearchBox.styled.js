@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { HiSearch } from 'react-icons/hi';
+import { HiSearch } from 'react-icon';
 
 export const Wrapper = styled.div`
   display: flex;

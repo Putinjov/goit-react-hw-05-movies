@@ -4,7 +4,6 @@ import propTypes from 'prop-types';
 
 export const MoviesList = ({ movies }) => {
   const location = useLocation();
-
   return (
     <Wrapper>
       <List>

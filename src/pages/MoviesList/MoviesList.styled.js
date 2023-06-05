@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import filmTape from 'images/film-tape.png';
-import defaultPoster from 'images/default_poster.jpg';
+import filmTape from '../../SVG/film.svg';
+import defaultPoster from '../../img/no-poster-available.jpg';
 import propTypes from 'prop-types';
 
 export const Wrapper = styled.div`
@@ -46,7 +46,7 @@ export const LinkToDetails = styled(Link)`
 
   &:hover,
   &:focus {
-    color: #ff3cac;
+    color: orange;
   }
 
   @media screen and (min-width: 768px) {
