@@ -1,44 +1,39 @@
 import styled from 'styled-components';
-import { HiSearch } from 'react-icon';
 
 export const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 0 16px;
-  flex-wrap: wrap;
+   display: flex;
+   align-item:center;
+    margin-left: 100px;
+    gap:30px;
+
+  form{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-left: 15px;
+    margin-top: 5px;
+    }
+
 
   input {
-    padding: 8px 32px 8px 8px;
-    width: 250px;
-    border-image: linear-gradient(
-      225deg,
-      rgba(255, 60, 172) 0%,
-      rgba(120, 75, 160) 50%,
-      rgba(43, 134, 197) 100%
-    );
-    border-image-slice: 1;
-    border-width: 2px;
-    border-style: solid;
-    font: inherit;
-    outline: none;
-    opacity: 0.7;
-    transition: opacity 250ms ease-in-out;
+    padding: 7px;
+    width: 200px;
+    height: calc(1.5rem + 2px);
+    border: 1px solid #272727;
+    border-radius: 5px;
+    padding: 0.375rem 0.75rem;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #bdbdbd;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 
-    &:hover {
-      opacity: 1;
-    }
-
-    &:focus {
-      opacity: 1;
-      background-image: linear-gradient(
-        90deg,
-        rgba(43, 134, 197, 0.15) 0%,
-        rgba(120, 75, 160, 0.15) 50%,
-        rgba(255, 60, 172, 0.15) 100%
-      );
-    }
-  }
 
   @media (max-width: 768px) {
     width: 100%;
@@ -53,28 +48,5 @@ export const Wrapper = styled.div`
 `;
 
 export const Header = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 1rem 0;
-  display: inline-block;
-
-  @media (max-width: 768px) {
-    font-size: 1.2rem;
-    width: 100%;
-    text-align: center;
-  }
-`;
-
-export const Icon = styled(HiSearch)`
-  width: 25px;
-  height: 25px;
-  position: relative;
-  right: 56px;
-  z-index: 1;
-  opacity: 0.7;
-
-  @media (max-width: 768px) {
-    top: -40px;
-    left: calc(50% - 20px);
-  }
+font-size: 30px;
 `;

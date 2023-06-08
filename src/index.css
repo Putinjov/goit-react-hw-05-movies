@@ -25,3 +25,14 @@ img {
   display: block;
   width: 100%;
 }
+
+.movies-btn{
+      background-color: orange;
+        border: none;
+        border-radius: 7px;
+        color: #fff;
+        font-size: 16px;
+        margin: 0 0 0 5px;
+        padding: 11px;
+        transition: all cubic-bezier(.215, .61, .355, 1);
+}

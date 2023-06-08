@@ -1,31 +1,39 @@
-import { DebounceInput } from 'react-debounce-input';
 import { useState } from 'react';
-import { Wrapper, Header, Icon } from './SearchBox.styled';
-import propTypes from 'prop-types';
+import { DebounceInput } from 'react-debounce-input';
+import { Wrapper, Header} from './SearchBox.styled';
+import PropTypes from 'prop-types';
+import css from '../../pages/Movies/movies.module.css';
 
-export const SearchBox = () => {
-  const [value, setValue] = useState('');
+export const SearchBox = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
 
   const handleChange = (e) => {
-    setValue(e.target.value);
+    setQuery(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(query);
+    
   };
 
   return (
     <Wrapper>
       <Header>Search movies:</Header>
-      <DebounceInput
-        type="text"
-        debounceTimeout={500}
-        value={value}
-        onChange={handleChange}
-        placeholder="type here"
-      />
-      <Icon />
+      <form onSubmit={handleSubmit}>
+        <DebounceInput
+          type="text"
+          debounceTimeout={500}
+          value={query}
+          onChange={handleChange}
+          placeholder="type here"
+        />
+        <button type='submit' className={css.btn}>Search</button>
+      </form>
     </Wrapper>
   );
 };
 
 SearchBox.propTypes = {
-  value: propTypes.string,
-  onChange: propTypes.func,
+  onSubmit: PropTypes.func.isRequired,
 };

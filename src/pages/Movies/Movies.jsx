@@ -1,25 +1,24 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { searchMovie } from '../../services/api';
-import css from './movies.module.css';
+import { SearchBox } from '../../components/SearchBox/SearchBox';
+import { MoviesList } from '../MoviesList/MoviesList';
+import { Loader } from '../../components/Loader/Loader';
+import {css} from 'styled-components';
 
-const Movies = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+ const Movies = () => {
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchQuery = searchParams.get('query');
 
-  const [query, setQuery] = useState(() => searchQuery || '');
+   useEffect(() => {
+    const query = searchParams.get('query');
 
-  const location = useLocation();
-
-  useEffect(() => {
-    const getData = async () => {
+     const getMovie = async () => {
       try {
         setLoading(true);
-        const { results } = await searchMovie(searchQuery);
-        setData(results);
+        const data = await searchMovie(query);
+        setMovies(data.results);
       } catch (error) {
         console.log(error);
       } finally {
@@ -27,61 +26,22 @@ const Movies = () => {
       }
     };
 
-    if (searchQuery) {
-      getData();
+     if (query) {
+      
+      getMovie();
     }
-  }, [searchQuery]);
-
-  const handleChange = (e) => {
-    setQuery(e.target.value);
+  }, [searchParams]);
+   
+  const onSubmit = query => {
+        setSearchParams({ query });
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearchParams({ query: query });
-  };
-
-  let content = null;
-
-  if (!searchQuery) {
-    content = <p className={css.descr}>Please enter a search query</p>;
-  } else if (loading) {
-    content = 'Loading...';
-  } else if (data.length > 0) {
-    content = data.map(({ title, id }) => (
-      <li key={id} className={css.listItem}>
-        <Link state={{ from: location }} to={`/movies/${id}`}>
-          {title}
-        </Link>
-      </li>
-    ));
-  } else {
-    content = (
-      <p className={css.descr}>
-        No movies with this title were found. Try entering another title
-      </p>
-    );
-  }
 
   return (
     <>
-      <div className={css.wrap}>
-        <h2 className={css.title}>Search movies:</h2>
-        <form onSubmit={handleSubmit} className={css.movieForm}>
-          <input
-            value={query}
-            onChange={handleChange}
-            name="search"
-            type="text"
-            placeholder="Type here"
-            className={css.movieInput}
-          />
-          <button type="submit" className={css.btn}>
-            Search
-          </button>
-        </form>
-      </div>
-      <ul className={css.list}>{content}</ul>
+      {loading && <Loader />}
+      <SearchBox onSubmit={onSubmit}/>
+      {movies && <MoviesList movies={movies} />}
+      {movies.length < 1 && <p className={css.error}>No data found</p>}
     </>
   );
 };

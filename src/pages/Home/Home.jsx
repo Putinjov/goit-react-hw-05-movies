@@ -4,6 +4,7 @@ import { getTrendingMovies } from '../../services/api';
 import { MoviesList } from 'pages/MoviesList/MoviesList';
 
 import css from './home.module.css';
+import { Loader } from 'components/Loader/Loader';
 
 const Home = () => {
   const [data, setData] = useState(null);
@@ -28,6 +29,7 @@ const Home = () => {
     <>
       <ListMovies>
         <h2 className={css.title}>Trending movies:</h2>
+        {loading && <Loader/>}
         {data && <MoviesList movies={data} />}
       </ListMovies>
     </>
